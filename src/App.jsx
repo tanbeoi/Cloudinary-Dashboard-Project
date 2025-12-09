@@ -11,7 +11,7 @@ function App() {
       {/* Top config navbar */}
       <Navbar />
 
-      {/* (Optional) Simple test nav */}
+      {/* Simple nav for testing */}
       <nav className="flex gap-4 p-4 border-b border-slate-800 bg-slate-900">
         <Link to="/upload" className="hover:underline">
           Upload
