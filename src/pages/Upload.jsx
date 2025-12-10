@@ -8,6 +8,7 @@ function Upload() {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [status, setStatus] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const [backendPreviewUrl, setBackendPreviewUrl] = useState(null);
 
   // Clean up object URL when file changes
   useEffect(() => {
@@ -60,6 +61,8 @@ function Upload() {
 
       const key = result.key || result.filename || "(no key returned)";
       setStatus(`Upload successful. Key: ${key}`);
+      const realUrl = `${baseUrl}/image/${encodeURIComponent(key)}?w=400`;
+      setBackendPreviewUrl(realUrl);
 
 
     // TODO: later – push this key into uploadsStore for the Gallery
@@ -160,6 +163,22 @@ function Upload() {
             )}
           </div>
         </div>
+
+        {/* Backend-served preview */}
+        {/* if backendPreviewURL exists, THEN this panel below displays */}
+        {backendPreviewUrl && (
+          <div className="space-y-2">
+            <h2 className="text-sm font-medium text-slate-200">Backend Image</h2>
+            <div className="flex h-64 items-center justify-center rounded border border-slate-700 bg-slate-900/60">
+              <img
+                src={backendPreviewUrl}
+                alt="Uploaded from backend"
+                className="max-h-full max-w-full object-contain"
+              />
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
