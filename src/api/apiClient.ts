@@ -1,6 +1,7 @@
 import useConfigStore from "../store/configStore";
 
 export function getClient() {
+    //get base URL and API key from the Zustand store (configStore)
   const { baseUrl, apiKey } = useConfigStore.getState();
 
   if (!baseUrl) {
@@ -8,6 +9,7 @@ export function getClient() {
   }
 
   return {
+    // Protected endpoint — needs API key
     async upload(formData: FormData) {
       const res = await fetch(`${baseUrl}/upload`, {
         method: "POST",
@@ -24,6 +26,7 @@ export function getClient() {
       return res.json();
     },
 
+    // Protected endpoint — needs API key
     async getMetadata(key: string) {
       const res = await fetch(`${baseUrl}/metadata/${key}`, {
         headers: {
@@ -38,6 +41,7 @@ export function getClient() {
       return res.json();
     },
 
+    // Protected endpoint — needs API key
     async getSignedUrl(key: string) {
       const res = await fetch(`${baseUrl}/sign/${key}`, {
         headers: {
