@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import useConfigStore from "../store/configStore";
 import { getClient } from "../api/apiClient";
+import useUploadsStore from "../store/uploadsStore";
 
 function Upload() {
   const { baseUrl, apiKey } = useConfigStore();
@@ -9,6 +10,7 @@ function Upload() {
   const [status, setStatus] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [backendPreviewUrl, setBackendPreviewUrl] = useState(null);
+  const addUpload = useUploadsStore((s) => s.addUpload);
 
   // Clean up object URL when file changes
   useEffect(() => {
@@ -31,49 +33,61 @@ function Upload() {
   }
 
   async function handleUpload() {
-    if (!file) {
-      setStatus("Please select a file before uploading.");
-      return;
-    }
-
-    if (!baseUrl) {
-      setStatus("Base URL is not set. Fill it in the navbar.");
-      return;
-    }
-
-    if (!apiKey) {
-      setStatus("API key is not set. Fill it in the navbar.");
-      return;
-    }
-
-    try {
-      //disable button and show loading status 
-      setIsUploading(true);
-      //show uploading status text under the button 
-      setStatus("Uploading…");
-
-      //get api client with base URL and API key from the store
-      const client = getClient();
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const result = await client.upload(formData);
-
-      const key = result.key || result.filename || "(no key returned)";
-      setStatus(`Upload successful. Key: ${key}`);
-      const realUrl = `${baseUrl}/image/${encodeURIComponent(key)}?w=400`;
-      setBackendPreviewUrl(realUrl);
-
-
-    // TODO: later – push this key into uploadsStore for the Gallery
-
-    } catch (err) {
-      console.error(err);
-      setStatus(err.message || "Upload failed.");
-    } finally {
-      setIsUploading(false);
-    }
+  if (!file) {
+    setStatus("Please select a file before uploading.");
+    return;
   }
+
+  if (!baseUrl) {
+    setStatus("Base URL is not set. Fill it in the navbar.");
+    return;
+  }
+
+  if (!apiKey) {
+    setStatus("API key is not set. Fill it in the navbar.");
+    return;
+  }
+
+  try {
+    // disable button and show loading status
+    setIsUploading(true);
+    setStatus("Uploading…");
+
+    // get api client with base URL and API key from the store
+    const client = getClient();
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const result = await client.upload(formData);
+
+    //use actual key for backend returns
+    const key = result.key;
+    if (!key) {
+      setStatus("Upload succeeded but no key was returned from the server.");
+      return;
+    }
+
+    const backendUrl = `${baseUrl}/image/${encodeURIComponent(key)}?w=400`;
+
+    setBackendPreviewUrl(backendUrl);
+    setStatus(`Upload successful. Key: ${key}`);
+
+    //upload into the session gallery store
+    addUpload({
+      key,
+      backendUrl,
+      originalName: file.name,
+      uploadedAt: Date.now(),
+    });
+
+  } catch (err) {
+    console.error(err);
+    setStatus(err.message || "Upload failed.");
+  } finally {
+    setIsUploading(false);
+  }
+}
+
 
   const configMissing = !baseUrl || !apiKey;
 
