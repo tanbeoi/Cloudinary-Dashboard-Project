@@ -88,8 +88,11 @@ export function getClient() {
     },
 
     // Protected endpoint — needs API key
-    async getSignedUrl(key: string) {
-      return request(`/sign/${encodeURIComponent(key)}`, { auth: true });
+    async getSignedUrl(key: string, expires: number = 3600) {
+      return request(`/sign/${encodeURIComponent(key)}`, {
+        auth: true,
+        query: { expires },
+      });
     },
 
     // Protected endpoint — needs API key

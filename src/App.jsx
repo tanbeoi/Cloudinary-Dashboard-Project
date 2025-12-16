@@ -22,8 +22,8 @@ function App() {
         <Link to="/gallery" className="hover:underline">
           Gallery
         </Link>
-        <Link to="/image/test-key-123" className="hover:underline">
-          Image (test)
+        <Link to="/image" className="hover:underline">
+          Image
         </Link>
         
         <Link to="/test-api">
@@ -37,6 +37,7 @@ function App() {
           <Route path="/" element={<Upload />} />
           <Route path="/upload" element={<Upload />} />
           <Route path="/gallery" element={<Gallery />} />
+          <Route path="/image" element={<Image />} />
           <Route path="/image/:key" element={<Image />} />
 
             {/* test route */}
