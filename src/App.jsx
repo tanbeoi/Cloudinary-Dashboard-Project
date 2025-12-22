@@ -5,45 +5,40 @@ import Upload from "./pages/Upload.jsx";
 import Gallery from "./pages/Gallery.jsx";
 import Image from "./pages/Image.jsx";
 
-import ApiTest from "./pages/ApiTest.jsx";
-
 
 function App() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50">
+    <div className="min-h-screen w-full bg-slate-950 text-slate-50 overflow-x-hidden">
       {/* Top config navbar */}
       <Navbar />
 
-      {/* Simple nav for testing */}
-      <nav className="flex gap-4 p-4 border-b border-slate-800 bg-slate-900">
-        <Link to="/upload" className="hover:underline">
-          Upload
-        </Link>
-        <Link to="/gallery" className="hover:underline">
-          Gallery
-        </Link>
-        <Link to="/image" className="hover:underline">
-          Image
-        </Link>
-        
-        <Link to="/test-api">
-          API Test
-        </Link>
+      {/* Simple nav */}
+      <nav className="w-full border-b border-slate-800 bg-slate-900">
+        <div className="mx-auto w-full max-w-5xl px-4 py-4">
+          <div className="flex flex-wrap gap-4">
+            <Link to="/upload" className="hover:underline">
+              Upload
+            </Link>
+            <Link to="/gallery" className="hover:underline">
+              Gallery
+            </Link>
+            <Link to="/image" className="hover:underline">
+              Image
+            </Link>
+          </div>
+        </div>
       </nav>
 
       {/* Main content container */}
-      <div className="max-w-5xl mx-auto px-4 py-6">
+      <main className="mx-auto w-full max-w-5xl px-4 py-6">
         <Routes>
           <Route path="/" element={<Upload />} />
           <Route path="/upload" element={<Upload />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/image" element={<Image />} />
           <Route path="/image/:key" element={<Image />} />
-
-            {/* test route */}
-          <Route path="/test-api" element={<ApiTest />} />
         </Routes>
-      </div>
+      </main>
     </div>
   );
 }
