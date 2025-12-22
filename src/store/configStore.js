@@ -1,10 +1,11 @@
 import { create } from "zustand";
+const DEFAULT_BASE_URL = import.meta.env.VITE_DEFAULT_BASE_URL || "";
 
 const useConfigStore = create((set) => ({
-  baseUrl: "",
+  baseUrl: DEFAULT_BASE_URL,
   apiKey: "",
-  setBaseUrl: (url) => set({ baseUrl: url }),
-  setApiKey: (key) => set({ apiKey: key }),
+  setBaseUrl: (baseUrl) => set({ baseUrl }),
+  setApiKey: (apiKey) => set({ apiKey }),
 }));
 
 export default useConfigStore;
