@@ -17,7 +17,7 @@ function Image() {
 
   const baseUrl = useConfigStore((s) => s.baseUrl);
 
-  // 🔑 Transform controls — STORE AS STRINGS
+  // 🔑 Transform controls 
   const [w, setW] = useState("600");
   const [h, setH] = useState("");
   const [q, setQ] = useState("80");
